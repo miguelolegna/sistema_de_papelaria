@@ -20,7 +20,7 @@ int main() {
   cout << "preco individual: " << lapis.preco << "\n"; 
    cout << "preço total: " << lapis.quantidade * lapis.preco;
 
-    if ()
+   // if ()
 
 
   return 0;
