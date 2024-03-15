@@ -1,77 +1,122 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include <iomanip> // Para std::setw
+#include <iomanip> 
+#include <algorithm>
+#include <unistd.h>
 
 using namespace std;
 
-// Definição da estrutura de produto
+
+// definição da estrutura de produto
 struct Product {
+    int id;
     string name;
     double purchasePrice;
     double salePrice;
     double profit;
+    int stock;
 };
 
-// Função para adicionar um novo produto ao vetor de produtos
+// função para adicionar um novo produto
 void addProduct(vector<Product>& products) {
     Product newProduct;
-    cout << "Digite o nome do produto: ";
+    cout << "\nDigite o nome do produto: ";
     cin >> newProduct.name;
     cout << "Digite o preco de compra do produto: ";
     cin >> newProduct.purchasePrice;
     cout << "Digite o preco de venda do produto: ";
     cin >> newProduct.salePrice;
     newProduct.profit = newProduct.salePrice - newProduct.purchasePrice;
+    cout << "Digite a quantidade a comprar: ";
+    cin >> newProduct.stock;
     products.push_back(newProduct);
     cout << "Produto adicionado com sucesso!\n";
 }
 
-// tabela para exibir os produtos e lucros
+// tabela para exibir os produtos 
 
 void displayProducts(const vector<Product>& products) {
     if (products.empty()) {
-        cout << "Não existem itens.\n";
+        cout << "\nNão existem itens.\n";
     } else {
-        cout << "Produtos:\n";
-        cout << left << setw(20) << "Nome" << setw(15) << "Preco de compra   " << setw(15) << "Preco de venda" << setw(10) << "Lucro" << endl;
-        cout << setfill('-') << setw(60) << "-" << endl;
+        cout << "\nTabela de produtos:\n\n";
+        cout << left << setw(5) << "Id" << setw(20) << "Nome" << setw(20) << "Preco de compra" << setw(20) << "Preco de venda" << setw(15) << "Lucro" << setw(10) << "Estoque" << endl;
+        cout << setfill('-') << setw(85) << "-" << endl;
         cout << setfill(' ');
         for (const auto& product : products) {
-            cout << left << setw(20) << product.name << setw(15) << product.purchasePrice
-                 << setw(15) << product.salePrice << setw(10) << product.profit << endl;
+            cout << setw(5) << left << product.id << setw(20) << product.name << setw(20) << fixed << setprecision(2) << product.purchasePrice
+                 << setw(20) << fixed << setprecision(2) << product.salePrice << setw(15) << fixed << setprecision(2) << product.profit
+                 << setw(10) << product.stock << endl;
         }
+    }
+}
+
+// função para comprar um produto
+void buyProduct(vector<Product>& products) {
+    int id;
+    int quantity;
+    cout << "\nDigite o ID do produto que deseja comprar: ";
+    cin >> id;
+    cout << "Digite a quantidade que deseja comprar: ";
+    cin >> quantity;
+
+    // Procura o produto pelo ID
+    auto it = find_if(products.begin(), products.end(), [id](const Product& p) {
+    return p.id == id;
+    });
+
+
+    // Verifica se o produto foi encontrado
+    if (it != products.end()) {
+        it->stock += quantity;
+        cout << "Compra realizada com sucesso!\n";
+    } else {
+        cout << "ID de produto invalido.\n";
     }
 }
 
 
 int main() {
-    vector<Product> products; // Vetor para armazenar os produtos
+    // lista de produtos predefinidos
+    vector<Product> products = {
+        {1, "Lapis", 0.75, 1.25, 1.25 - 0.75},  
+        {2, "Caneta", 1, 1.50, 1.50 - 1},
+        {3, "Borracha", 0.70, 1.50, 1.50 - 0.70},
+        {4, "Caderno", 2, 5, 5 - 2}
+    };
 
     int choice;
     do {
-        cout << "\nEscolha uma opcao:\n"
-             << "1. Mostrar esta lista\n"
-             << "2. Adicionar produto\n"
-             << "3. Exibir produtos e lucros\n"
-             << "4. Sair\n"
+        cout << "\nEscolha uma acao:\n"
+            // << "1. Mostrar esta lista\n"
+             << "1. Lista de produtos\n"
+             << "2. Adicionar produto a lista\n"
+             << "3. Repor stock\n"
+             << "0. Sair\n"
              << "Sua opcao: ";
         cin >> choice;
 
         switch (choice) {
+            case 1:
+                displayProducts(products);
+                break;
             case 2:
                 addProduct(products);
                 break;
             case 3:
-                displayProducts(products);
+                buyProduct(products);
                 break;
-            case 4:
-                cout << "Adeus...";
+            case 0:
+             cout << "Adeus...";
+                sleep(1); 
                 break;
+
+
             default:
-                cout << " Opção inválida. Tente novamente.";
+                cout << " Opcao invalida. Tente novamente.";
         }
-    } while (choice != 4);
+    } while (choice != 0);
 
     return 0;
 }
