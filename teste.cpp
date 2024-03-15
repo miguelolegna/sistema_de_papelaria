@@ -18,9 +18,15 @@ struct Product {
     int stock;
 };
 
-// função para adicionar um novo produto
+// Variável global para armazenar o último ID atribuído
+int lastProductId = 4;
+
+// Incrementa o ID para o novo produto
 void addProduct(vector<Product>& products) {
     Product newProduct;
+    
+    lastProductId++;
+    
     cout << "\nDigite o nome do produto: ";
     cin >> newProduct.name;
     cout << "Digite o preco de compra do produto: ";
@@ -30,7 +36,13 @@ void addProduct(vector<Product>& products) {
     newProduct.profit = newProduct.salePrice - newProduct.purchasePrice;
     cout << "Digite a quantidade a comprar: ";
     cin >> newProduct.stock;
+    
+    // Atribui o ID atual ao novo produto
+    newProduct.id = lastProductId;
+    
+    // Adiciona o novo produto ao vetor
     products.push_back(newProduct);
+    
     cout << "Produto adicionado com sucesso!\n";
 }
 
@@ -52,6 +64,7 @@ void displayProducts(const vector<Product>& products) {
     }
 }
 
+
 // função para comprar um produto
 void buyProduct(vector<Product>& products) {
     int id;
@@ -60,6 +73,7 @@ void buyProduct(vector<Product>& products) {
     cin >> id;
     cout << "Digite a quantidade que deseja comprar: ";
     cin >> quantity;
+
 
     // Procura o produto pelo ID
     auto it = find_if(products.begin(), products.end(), [id](const Product& p) {
@@ -80,10 +94,10 @@ void buyProduct(vector<Product>& products) {
 int main() {
     // lista de produtos predefinidos
     vector<Product> products = {
-        {1, "Lapis", 0.75, 1.25, 1.25 - 0.75},  
-        {2, "Caneta", 1, 1.50, 1.50 - 1},
-        {3, "Borracha", 0.70, 1.50, 1.50 - 0.70},
-        {4, "Caderno", 2, 5, 5 - 2}
+        {1, "Lapis", 0.75, 1.25, 1.25 - 0.75, 50},  
+        {2, "Caneta", 1, 1.50, 1.50 - 1, 50},
+        {3, "Borracha", 0.70, 1.50, 1.50 - 0.70, 50},
+        {4, "Caderno", 2, 5, 5 - 2, 20, 30}
     };
 
     int choice;
@@ -108,7 +122,7 @@ int main() {
                 buyProduct(products);
                 break;
             case 0:
-             cout << "Adeus...";
+             cout << "Volte sempre! =D";
                 sleep(1); 
                 break;
 
