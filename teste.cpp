@@ -18,10 +18,9 @@ struct Product {
     int stock;
 };
 
-// Variável global para armazenar o último ID atribuído
+// dá um ID ao novo item
 int lastProductId = 4;
 
-// Incrementa o ID para o novo produto
 void addProduct(vector<Product>& products) {
     Product newProduct;
     
@@ -37,16 +36,15 @@ void addProduct(vector<Product>& products) {
     cout << "Digite a quantidade a comprar: ";
     cin >> newProduct.stock;
     
-    // Atribui o ID atual ao novo produto
+    // Atribui o ID 
     newProduct.id = lastProductId;
     
-    // Adiciona o novo produto ao vetor
     products.push_back(newProduct);
     
     cout << "Produto adicionado com sucesso!\n";
 }
 
-// tabela para exibir os produtos 
+// tabela dos produtos 
 
 void displayProducts(const vector<Product>& products) {
     if (products.empty()) {
@@ -65,7 +63,7 @@ void displayProducts(const vector<Product>& products) {
 }
 
 
-// função para comprar um produto
+// função para comprar um produto (stock)
 void buyProduct(vector<Product>& products) {
     int id;
     int quantity;
@@ -80,8 +78,6 @@ void buyProduct(vector<Product>& products) {
     return p.id == id;
     });
 
-
-    // Verifica se o produto foi encontrado
     if (it != products.end()) {
         it->stock += quantity;
         cout << "Compra realizada com sucesso!\n";
@@ -90,20 +86,20 @@ void buyProduct(vector<Product>& products) {
     }
 }
 
-
 int main() {
-    // lista de produtos predefinidos
+    // lista de produtos 
     vector<Product> products = {
         {1, "Lapis", 0.75, 1.25, 1.25 - 0.75, 50},  
         {2, "Caneta", 1, 1.50, 1.50 - 1, 50},
-        {3, "Borracha", 0.70, 1.50, 1.50 - 0.70, 50},
-        {4, "Caderno", 2, 5, 5 - 2, 20, 30}
+        {3, "Borracha", 0.70, 1.50, 1.50 - 0.70, 40},
+        {4, "Caderno", 2, 5, 5 - 2, 35}
     };
 
+
+    //lista de açoes
     int choice;
     do {
         cout << "\nEscolha uma acao:\n"
-            // << "1. Mostrar esta lista\n"
              << "1. Lista de produtos\n"
              << "2. Adicionar produto a lista\n"
              << "3. Repor stock\n"
@@ -125,8 +121,6 @@ int main() {
              cout << "Volte sempre! =D";
                 sleep(1); 
                 break;
-
-
             default:
                 cout << " Opcao invalida. Tente novamente.";
         }
